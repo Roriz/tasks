@@ -2,7 +2,9 @@
   <v-dialog :value="isOpen" persistent max-width="290">
     <v-card>
       <v-card-title class="headline">Are you sure you want to exclude this task?</v-card-title>
-      <v-card-text>This action can not be reversed, make sure that you no longer need any of your information</v-card-text>
+      <v-card-text>
+        This action can not be reversed, make sure that you no longer need any of your information
+      </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="green darken-1" flat="flat" @click.native="$emit('close')">Cancel</v-btn>

@@ -5,7 +5,15 @@
         <v-list-tile-content>
           <v-list-tile-sub-title class="grey--text text--darken-4">
             {{ task.description }}
-            <v-chip color="primary" text-color="white" v-for="(tag, i) in task.tags">{{ tag.description }}</v-chip>
+
+            <v-chip
+              color="primary"
+              text-color="white"
+              v-for="(tag, i) in task.tags"
+              :key="i"
+            >
+              {{ tag.description }}
+            </v-chip>
           </v-list-tile-sub-title>
         </v-list-tile-content>
 
