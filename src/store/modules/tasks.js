@@ -1,6 +1,7 @@
 import Services from '@/services';
 import Task from '@/models/task';
 import Cid from '@/models/concerns/cid';
+import SEARCH_FIELDS from '@/consts/search-fields';
 
 export default {
   namespaced: true,
@@ -17,12 +18,12 @@ export default {
       new Task({ id: Cid(), due_time: '00:00', description: 'Test 8' }),
     ],
     filters: {
-      description: '',
+      search: '',
+      searchField: SEARCH_FIELDS.description,
     },
   },
   mutations: {
     ADD(state, task) {
-      console.log(task);
       state.list.push(new Task(task));
     },
     UPDATE(state, newTask) {
@@ -33,7 +34,10 @@ export default {
       task.destroy();
     },
     UPDATE_SEARCH(state, search) {
-      state.filters.description = search;
+      state.filters.search = search;
+    },
+    UPDATE_SEARCH_FIELD(state, searchField) {
+      state.filters.searchField = searchField;
     },
   },
   actions: {
@@ -81,13 +85,19 @@ export default {
   },
   getters: {
     tasksFiltered(state) {
-      const search = new RegExp(state.filters.description, 'i');
+      const search = new RegExp(state.filters.search, 'i');
       let tasks = state.list;
 
       tasks = tasks.filter(task => !task.deleted_at);
 
-      if (state.filters.description) {
-        tasks = tasks.filter(task => task.description.search(search) !== -1);
+      if (state.filters.search) {
+        if (state.filters.searchField === SEARCH_FIELDS.description) {
+          tasks = tasks.filter(task => task.description.search(search) !== -1);
+        } else if (state.filters.searchField === SEARCH_FIELDS.tags) {
+          tasks = tasks.filter(task => {
+            return task.tags.find((tag) => tag.description.search(search) !== -1)
+          });
+        }
       }
 
       return tasks;

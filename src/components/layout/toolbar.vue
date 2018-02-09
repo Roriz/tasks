@@ -23,10 +23,22 @@
       :value="search"
       @input="handleSearch"
     />
+
+    <v-select
+      class="search-field"
+      :items="searchableFields"
+      :value="searchField"
+      @input="handleSearchField"
+      label="Search in"
+      autocomplete
+      dark
+    />
   </v-toolbar>
 </template>
 
 <script>
+import SEARCH_FIELDS from '@/consts/search-fields';
+
 export default {
   name: 'toolbar',
 
@@ -38,19 +50,36 @@ export default {
     handleSearch(value) {
       this.$store.commit('tasks/UPDATE_SEARCH', value);
     },
+
+    handleSearchField(value) {
+      this.$store.commit('tasks/UPDATE_SEARCH_FIELD', value);
+    },
   },
 
   computed: {
     search() {
-      return this.$store.state.tasks.filters.description;
+      return this.$store.state.tasks.filters.search;
+    },
+    searchField() {
+      return this.$store.state.tasks.filters.searchField;
+    },
+    searchableFields() {
+      return Object.values(SEARCH_FIELDS);
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
-  .search {
+  .search{
     min-width: 128px;
     max-width: 500px;
+  }
+
+  .search-field {
+    min-width: 128px;
+    max-width: 200px;
+    margin-left: 20px;
+    margin-top: 20px;
   }
 </style>

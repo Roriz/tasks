@@ -11,10 +11,12 @@ export default class Tag {
   }
 
   get description() {
+    // eslint-disable-next-line
     return this._description;
   }
 
   set description(val) {
+    // eslint-disable-next-line
     this._description = val;
     this.updated_at = new DateFormatter(new Date());
   }

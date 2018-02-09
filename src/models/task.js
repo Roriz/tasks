@@ -1,5 +1,4 @@
 import DateFormatter from './concerns/date_formatter';
-import Cid from './concerns/cid';
 import Tag from './tag';
 
 export default class Task {
@@ -56,46 +55,62 @@ export default class Task {
   }
 
   get description() {
+    // eslint-disable-next-line
     return this._description;
   }
 
   set description(val) {
+    // eslint-disable-next-line
     this._description = val;
     this.updated_at = new DateFormatter(new Date());
   }
 
+  // eslint-disable-next-line
   get due_date() {
+    // eslint-disable-next-line
     return this._due_date;
   }
 
+  // eslint-disable-next-line
   set due_date(val) {
+    // eslint-disable-next-line
     this._due_date = val;
     this.updated_at = new DateFormatter(new Date());
   }
 
+  // eslint-disable-next-line
   get due_time() {
+    // eslint-disable-next-line
     return this._due_time;
   }
 
+  // eslint-disable-next-line
   set due_time(val) {
+    // eslint-disable-next-line
     this._due_time = val;
     this.updated_at = new DateFormatter(new Date());
   }
 
+  // eslint-disable-next-line
   get remember_timer() {
+    // eslint-disable-next-line
     return this._remember_timer;
   }
 
+  // eslint-disable-next-line
   set remember_timer(val) {
+    // eslint-disable-next-line
     this._remember_timer = val;
     this.updated_at = new DateFormatter(new Date());
   }
 
   get tags() {
+    // eslint-disable-next-line
     return this._tags;
   }
 
   set tags(val) {
+    // eslint-disable-next-line
     this._tags = val;
     this.updated_at = new DateFormatter(new Date());
   }

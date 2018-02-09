@@ -43,8 +43,8 @@ export default {
         this.$emit('close');
         this.saving = false;
       } catch (e) {
-        console.error('dispatch - tasks/destroyOne', this.value.id, e);
         this.saving = false;
+        throw new Error(e);
       }
     },
   },
