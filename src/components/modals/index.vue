@@ -1,6 +1,6 @@
 <template>
   <div>
-    <task-form :visible="taskForm"/>
+    <task-form v-if="taskForm" @close="taskForm = false"/>
   </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
 
   data() {
     return {
-      taskForm: false,
+      taskForm: true,
     };
   },
 };

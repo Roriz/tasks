@@ -1,5 +1,5 @@
 <template>
-  <div class="modal" v-if="visible">
+  <div class="modal">
     <div class="modal-dialog">
       <div class="modal-content">
         <slot class="modal-header" name="header"/>
@@ -17,10 +17,6 @@ export default {
   name: 'modal',
 
   props: {
-    visible: {
-      type: Boolean,
-      default: false,
-    },
     options: {
       type: Object,
       default: () => ({}),
@@ -28,20 +24,11 @@ export default {
   },
 
   mounted() {
-    this.open();
+    $(this.$el).modal({ show: true });
   },
 
-  methods: {
-    open() {
-      if (!this.visible) { return; }
-      $(this.$el).modal({ show: true });
-    },
-  },
-
-  watchs: {
-    visible() {
-      this.open();
-    },
+  beforeDestroy() {
+    $(this.$el).modal('hide');
   },
 };
 </script>
