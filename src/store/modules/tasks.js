@@ -25,7 +25,7 @@ export default {
       state.list.push(new Task(task));
     },
     UPDATE(state, newTask) {
-      state.list = state.list.map(task => (newTask.id === task.id ? newTask : task));
+      state.list = state.list.map(task => (newTask.id === task.id ? new Task(newTask) : task));
     },
     DESTROY(state, id) {
       state.list = state.list.filter(task => task.id !== id);

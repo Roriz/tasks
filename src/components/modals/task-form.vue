@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="isOpen" @input="$emit('open')" persistent max-width="500px">
+  <v-dialog v-if="isOpen" :value="isOpen" @input="$emit('open')" persistent max-width="500px">
     <v-card>
       <v-card-title>
         <span v-if="task.isPersisted" class="headline">Update task</span>
@@ -47,6 +47,27 @@
                 v-model="task.remember_timer"
               />
             </v-flex>
+
+            <v-flex xs12>
+              <v-select
+                label="Tags"
+                chips
+                tags
+                solo
+                clearable
+                :value="task.tags"
+                @input="handleTag"
+              >
+                <template slot="selection" slot-scope="data">
+                  <v-chip
+                    close
+                    @input="destroyTag(data)"
+                  >
+                    <span>{{ data.item.description }}</span>
+                  </v-chip>
+                </template>
+              </v-select>
+            </v-flex>
           </v-layout>
         </v-container>
 
@@ -72,6 +93,7 @@
 import Datepicker from '@/components/base/datepicker';
 import Timepicker from '@/components/base/timepicker';
 import Task from '@/models/task';
+import Tag from '@/models/tag';
 
 export default {
   name: 'task-form',
@@ -88,13 +110,13 @@ export default {
     },
     value: {
       type: Object,
-      default: null,
+      default: () => ({}),
     },
   },
 
   data() {
     return {
-      task: this.value || new Task(),
+      task: new Task(this.value || {}),
       saving: false,
       requestErrors: null,
     };
@@ -116,11 +138,31 @@ export default {
         this.saving = false;
       }
     },
+
+    handleTag(tags) {
+      if (tags.length) {
+        this.addTag(tags[tags.length - 1]);
+      } else {
+        this.clearTags();
+      }
+    },
+
+    addTag(tag) {
+      this.task.tags.push(new Tag({ description: tag }));
+    },
+
+    clearTags() {
+      this.task.tags = [];
+    },
+
+    destroyTag(params) {
+      this.task.tags = this.task.tags.filter((tag, i) => i !== params.index);
+    },
   },
 
   watch: {
     value() {
-      this.task = this.value || new Task();
+      this.task = new Task(this.value || {});
     },
   },
 };

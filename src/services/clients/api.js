@@ -3,7 +3,7 @@ import Cid from '@/models/concerns/cid';
 const call = async (_url, params) => {
   await setTimeout(2000);
   // eslint-disable-next-line
-  params.id = Cid();
+  params.id = params.id || Cid();
   return params;
 };
 
