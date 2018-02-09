@@ -15,13 +15,13 @@ export default new Router({
       path: '/dashboard',
       name: 'Dashboard',
       component: Dashboard,
-      meta: { icon: 'fa-pie-chart' },
+      meta: { icon: 'timeline' },
     },
     {
       path: '/tasks',
       name: 'Tasks',
       component: Tasks,
-      meta: { icon: 'fa-tasks' },
+      meta: { icon: 'list' },
     },
   ],
 });
