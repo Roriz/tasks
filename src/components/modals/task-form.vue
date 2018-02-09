@@ -1,12 +1,18 @@
 <template>
-  <v-dialog :value="visible" @input="$emit('open')" persistent max-width="500px">
+  <v-dialog :value="isOpen" @input="$emit('open')" persistent max-width="500px">
     <v-card>
       <v-card-title>
-        <span class="headline">Create new task</span>
+        <span v-if="task.isPersisted" class="headline">Update task</span>
+        <span v-else class="headline">Create new task</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
           <v-layout wrap>
+            <v-flex md12>
+              <v-alert v-if="requestErrors" color="error" icon="warning" value="true">
+                Algo de errado não está certo. {{ requestErrors }}
+              </v-alert>
+            </v-flex>
             <v-flex md12>
               <v-text-field
                 v-model="task.description"
@@ -76,15 +82,19 @@ export default {
   },
 
   props: {
-    visible: {
+    isOpen: {
       type: Boolean,
       default: false,
+    },
+    value: {
+      type: Object,
+      default: null,
     },
   },
 
   data() {
     return {
-      task: new Task(),
+      task: this.value || new Task(),
       saving: false,
       requestErrors: null,
     };
@@ -94,12 +104,23 @@ export default {
     async save() {
       this.saving = true;
       try {
-        await this.$store.dispatch('tasks/createOne', this.task);
+        if (this.task.isPersisted) {
+          await this.$store.dispatch('tasks/updateOne', this.task);
+        } else {
+          await this.$store.dispatch('tasks/createOne', this.task);
+        }
         this.$emit('close');
+        this.saving = false;
       } catch (e) {
-        this.requestErrors = e;
+        this.requestErrors = e || true;
         this.saving = false;
       }
+    },
+  },
+
+  watch: {
+    value() {
+      this.task = this.value || new Task();
     },
   },
 };

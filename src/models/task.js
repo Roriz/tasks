@@ -4,15 +4,24 @@ import Tag from './tag';
 
 export default class Task {
   constructor(param = {}) {
-    this.id = param.id || Cid();
+    this.id = param.id;
+    this.cid = param.cid || Cid();
     this.description = param.description || '';
     this.due_date = new DateFormatter(param.due_date || new Date());
-    this.due_time = null;
+    this.due_time = param.due_time || null;
     this.remember_timer = param.remember_timer || 5; // INFO: In minutes
     this.tags = param.tags ? param.tags.map(tag => new Tag(tag)) : [];
     this.created_at = new DateFormatter(new Date());
     this.updated_at = new DateFormatter(new Date());
     this.deleted_at = new DateFormatter(new Date());
+  }
+
+  get isPersisted() {
+    return Boolean(this.id);
+  }
+
+  get dueDatetime() {
+    return `${this.due_date.formatted} ${this.due_time}`;
   }
 
   get isValid() {

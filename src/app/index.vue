@@ -5,14 +5,16 @@
     <toolbar />
 
     <v-content>
-      <v-container fluid fill-height>
-        <v-layout justify-center align-center>
+      <v-container fluid>
+        <v-layout>
           <router-view />
         </v-layout>
       </v-container>
     </v-content>
 
     <fab-btn />
+
+    <modals />
   </v-app>
 </template>
 

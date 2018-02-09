@@ -7,27 +7,23 @@
       color="pink"
       dark
       fixed
-      @click.stop="visible = !visible"
+      @click.stop="openTaskForm"
     >
       <v-icon>add</v-icon>
     </v-btn>
-    <task-form :visible="visible" @close="visible = false" @open="visible = true"/>
   </div>
 </template>
 
 <script>
-import TaskForm from '@/components/modals/task-form';
+import EventBus from '@/utils/event-bus';
 
 export default {
   name: 'fab-btn',
-  components: {
-    TaskForm,
-  },
 
-  data() {
-    return {
-      visible: false,
-    };
+  methods: {
+    openTaskForm() {
+      EventBus.$emit('open-modal', 'taskForm');
+    },
   },
 };
 </script>

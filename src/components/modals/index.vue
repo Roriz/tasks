@@ -1,10 +1,16 @@
 <template>
   <div>
-    <task-form :visible="taskForm" @close="taskForm = false" @open="taskForm = true"/>
+    <task-form
+      :value="taskForm.task"
+      :is-open="taskForm.isOpen"
+      @close="closeModal('taskForm')"
+      @open="openModal('taskForm')"
+    />
   </div>
 </template>
 
 <script>
+import EventBus from '@/utils/event-bus';
 import TaskForm from './task-form';
 
 export default {
@@ -16,8 +22,24 @@ export default {
 
   data() {
     return {
-      taskForm: false,
+      taskForm: {
+        isOpen: false,
+        task: null,
+      },
     };
+  },
+
+  mounted() {
+    EventBus.$on('open-modal', this.openModal);
+  },
+
+  methods: {
+    openModal(name, options = {}) {
+      this[name] = { ...this[name], isOpen: true, ...options };
+    },
+    closeModal(name) {
+      this[name] = { isOpen: false };
+    },
   },
 };
 </script>
