@@ -22,13 +22,15 @@ export default {
   },
   mutations: {
     ADD(state, task) {
+      console.log(task);
       state.list.push(new Task(task));
     },
     UPDATE(state, newTask) {
       state.list = state.list.map(task => (newTask.id === task.id ? new Task(newTask) : task));
     },
     DESTROY(state, id) {
-      state.list = state.list.filter(task => task.id !== id);
+      const task = state.list.find(elem => elem.id === id);
+      task.destroy();
     },
     UPDATE_SEARCH(state, search) {
       state.filters.description = search;
@@ -42,6 +44,8 @@ export default {
         due_time: task.due_time,
         remember_timer: task.remember_timer,
         tags: task.tags,
+        created_at: task.created_at.iso,
+        updated_at: task.updated_at.iso,
       };
 
       const savedTask = await Services.task.createOne(params);
@@ -58,6 +62,8 @@ export default {
         due_time: task.due_time,
         remember_timer: task.remember_timer,
         tags: task.tags,
+        created_at: task.created_at.iso,
+        updated_at: task.updated_at.iso,
       };
 
       const savedTask = await Services.task.updateOne(params);
@@ -77,6 +83,9 @@ export default {
     tasksFiltered(state) {
       const search = new RegExp(state.filters.description, 'i');
       let tasks = state.list;
+
+      tasks = tasks.filter(task => !task.deleted_at);
+
       if (state.filters.description) {
         tasks = tasks.filter(task => task.description.search(search) !== -1);
       }

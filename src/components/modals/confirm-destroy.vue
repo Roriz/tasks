@@ -8,7 +8,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="green darken-1" flat="flat" @click.native="$emit('close')">Cancel</v-btn>
-        <v-btn color="error" @click.native="confirm">Confirm</v-btn>
+        <v-btn color="error" @click.native="confirm" :disabled="saving">Confirm</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -29,6 +29,12 @@ export default {
     },
   },
 
+  data() {
+    return {
+      saving: false,
+    };
+  },
+
   methods: {
     async confirm() {
       this.saving = true;
@@ -37,7 +43,7 @@ export default {
         this.$emit('close');
         this.saving = false;
       } catch (e) {
-        this.requestErrors = e || true;
+        console.error('dispatch - tasks/destroyOne', this.value.id, e);
         this.saving = false;
       }
     },
