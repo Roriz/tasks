@@ -24,6 +24,9 @@ export default {
     UPDATE(state, newTask) {
       state.list = state.list.map(task => (newTask.id === task.id ? newTask : task));
     },
+    DESTROY(state, id) {
+      state.list = state.list.filter(task => task.id !== id);
+    },
   },
   actions: {
     async createOne(context, task) {
@@ -53,6 +56,13 @@ export default {
 
       const savedTask = await Services.task.updateOne(params);
       context.commit('UPDATE', savedTask);
+
+      return savedTask;
+    },
+
+    async destroyOne(context, id) {
+      const savedTask = await Services.task.destroyOne({ id });
+      context.commit('DESTROY', id);
 
       return savedTask;
     },

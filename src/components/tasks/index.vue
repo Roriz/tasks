@@ -43,6 +43,9 @@ export default {
     update(task) {
       EventBus.$emit('open-modal', 'taskForm', { task });
     },
+    destroy(task) {
+      EventBus.$emit('open-modal', 'confirmDestroy', { task });
+    },
   },
 
   computed: {
