@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <v-app>
     <modals/>
     <router-view/>
-  </div>
+  </v-app>
 </template>
 
 <script>
@@ -16,10 +16,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss">
-  $fa-font-path: "~font-awesome/fonts";
-
-  @import "~bootstrap/scss/bootstrap";
-  @import "~font-awesome/scss/font-awesome";
-</style>

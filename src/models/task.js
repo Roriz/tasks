@@ -7,6 +7,7 @@ export default class Task {
     this.id = param.id || Cid();
     this.description = param.description || '';
     this.due_date = new DateFormatter(param.due_date || new Date());
+    this.due_time = null;
     this.remember_timer = param.remember_timer || 5; // INFO: In minutes
     this.tags = param.tags ? param.tags.map(tag => new Tag(tag)) : [];
     this.created_at = new DateFormatter(new Date());
@@ -15,18 +16,30 @@ export default class Task {
   }
 
   get isValid() {
-    return this.errors.length === 0;
+    return this.remember_timer &&
+      !this.descriptionErrors.length &&
+      !this.dueTimeErrors.length &&
+      !this.dueDateErrors.length;
   }
 
-  get errors() {
-    const errors = [];
+  get descriptionErrors() {
     if (!this.description) {
-      errors.push({ field: 'description', message: 'Description is required.' });
+      return ['Description is required.'];
     }
+    return [];
+  }
 
-    if (!(this.due_date && this.due_date.value)) {
-      errors.push({ field: 'due_date', message: 'Due date is required.' });
+  get dueTimeErrors() {
+    if (!this.due_time) {
+      return ['Due time is required.'];
     }
-    return errors;
+    return [];
+  }
+
+  get dueDateErrors() {
+    if (this.due_date && this.due_date.isValid) {
+      return [];
+    }
+    return ['Due date is required.'];
   }
 }

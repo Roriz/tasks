@@ -1,72 +1,92 @@
 <template>
-  <modal>
-    <div slot="body">
-      <div v-if="requestErrors" class="alert alert-danger" role="alert">
-        This is a generic error. {{ e }}
-      </div>
+  <v-layout row justify-center>
+    <v-dialog :value="visible" @input="$emit('open')" persistent max-width="500px">
+      <v-btn color="primary" dark slot="activator">Open Dialog</v-btn>
+      <v-card>
+        <v-card-title>
+          <span class="headline">Create new task</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container grid-list-md>
+            <v-layout wrap>
+              <v-flex md12>
+                <v-text-field
+                  v-model="task.description"
+                  label="Task description"
+                  required
+                  :rules="task.descriptionErrors"
+                />
+              </v-flex>
 
-      <div
-        v-show="!task.isValid"
-        v-for="(error, key) in task.errors"
-        :key="key"
-        class="alert alert-warning"
-        role="alert"
-      >
-        {{ error.message }}
-      </div>
+              <v-flex xs12>
+                <datepicker
+                  label="Due date"
+                  v-model="task.due_date.value"
+                  :rules="task.dueDateErrors"
+                />
+              </v-flex>
 
-      <form @submit.prevent="save">
-        <div class="form-group col-12">
-          <label for="description">Description</label>
-          <input id="description" type="text" class="form-control" v-model="task.description"/>
-        </div>
+              <v-flex xs12>
+                <timepicker
+                  label="Due time"
+                  v-model="task.due_time"
+                  :rules="task.dueTimeErrors"
+                />
+              </v-flex>
 
-        <div class="form-group col-12">
-          <label for="due_date">Deadline of the task</label>
-          <flat-pickr
-            v-model="task.due_date.value"
-            :config="FlatpickrConfig"
-            class="form-control"
-            placeholder="Select date"
-          />
-        </div>
+              <v-flex xs12>
+                <v-text-field
+                  required
+                  label="Notification Time"
+                  suffix="minutes"
+                  hint="Time to trigger notification before of due date"
+                  v-model="task.remember_timer"
+                />
+              </v-flex>
+            </v-layout>
+          </v-container>
 
-        <div class="form-group col-12">
-          <label for="due_date">Notification Time</label>
-          <input id="due_date" type="number" class="form-control" v-model="task.remember_timer"/>
-          <small id="emailHelp" class="form-text text-muted">Minutes before of notification.</small>
-        </div>
+          <small>*indicates required field</small>
+        </v-card-text>
 
-        <button
-          type="submit"
-          class="btn btn-primary"
-          :disabled="saving || !task.isValid"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
-  </modal>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" flat @click.native="$emit('close')">Close</v-btn>
+          <v-btn
+            color="primary"
+            :disabled="!task.isValid || saving"
+            @click.native="save"
+          >
+            Save
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-layout>
 </template>
 
 <script>
-import Modal from '@/components/base/modal';
+import Datepicker from '@/components/base/datepicker';
+import Timepicker from '@/components/base/timepicker';
 import Task from '@/models/task';
-import FlatpickrConfig from '@/config/flatpickr';
-import flatPickr from 'vue-flatpickr-component';
-import 'flatpickr/dist/flatpickr.css';
 
 export default {
   name: 'task-form',
 
   components: {
-    Modal,
-    flatPickr,
+    Datepicker,
+    Timepicker,
+  },
+
+  props: {
+    visible: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {
     return {
-      FlatpickrConfig,
       task: new Task(),
       saving: false,
       requestErrors: null,

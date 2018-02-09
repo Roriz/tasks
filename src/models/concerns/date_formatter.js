@@ -25,4 +25,8 @@ export default class DateFormatter {
   get value() {
     return this.iso;
   }
+
+  get isValid() {
+    return this.raw && this.iso;
+  }
 }

@@ -22,6 +22,6 @@ export default class API {
 
   // eslint-disable-next-line
   call(url, params, type) {
-    call(url, params, type);
+    return call(url, params, type);
   }
 }
