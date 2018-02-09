@@ -58,7 +58,7 @@ export default {
 
   computed: {
     tasks() {
-      return this.$store.state.tasks.list;
+      return this.$store.getters['tasks/tasksFiltered'];
     },
   },
 };

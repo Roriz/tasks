@@ -16,6 +16,9 @@ export default {
       new Task({ id: Cid(), due_time: '00:00', description: 'Test 7', tags: [{ description: 'Tag1' }, { description: 'Tag2' }] }),
       new Task({ id: Cid(), due_time: '00:00', description: 'Test 8' }),
     ],
+    filters: {
+      description: '',
+    },
   },
   mutations: {
     ADD(state, task) {
@@ -26,6 +29,9 @@ export default {
     },
     DESTROY(state, id) {
       state.list = state.list.filter(task => task.id !== id);
+    },
+    UPDATE_SEARCH(state, search) {
+      state.filters.description = search;
     },
   },
   actions: {
@@ -67,6 +73,16 @@ export default {
       return savedTask;
     },
   },
-  getters: {},
+  getters: {
+    tasksFiltered(state) {
+      const search = new RegExp(state.filters.description, 'i');
+      let tasks = state.list;
+      if (state.filters.description) {
+        tasks = tasks.filter(task => task.description.search(search) !== -1);
+      }
+
+      return tasks;
+    },
+  },
 };
 

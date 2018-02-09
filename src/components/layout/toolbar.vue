@@ -13,12 +13,15 @@
       <v-toolbar-side-icon @click.stop="toggleNavigationDrawer"/>
       <span class="hidden-xs-only">Tasks</span>
     </v-toolbar-title>
+
     <v-text-field
       light
       solo
       prepend-icon="search"
       placeholder="Search"
-      style="max-width: 500px; min-width: 128px"
+      class="search"
+      :value="search"
+      @input="handleSearch"
     />
   </v-toolbar>
 </template>
@@ -31,6 +34,23 @@ export default {
     toggleNavigationDrawer() {
       this.$store.commit('layout/TOGGLE_NAVIGATION_DRAWER');
     },
+
+    handleSearch(value) {
+      this.$store.commit('tasks/UPDATE_SEARCH', value);
+    },
+  },
+
+  computed: {
+    search() {
+      return this.$store.state.tasks.filters.description;
+    },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .search {
+    min-width: 128px;
+    max-width: 500px;
+  }
+</style>
