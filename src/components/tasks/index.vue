@@ -32,7 +32,7 @@
             </v-list>
           </v-menu>
 
-          <v-list-tile-action-text>{{ task.dueDatetime }}</v-list-tile-action-text>
+          <v-list-tile-action-text>{{ task.deadLine.dateTimeFormatted }}</v-list-tile-action-text>
         </v-list-tile-action>
       </v-list-tile>
 

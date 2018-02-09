@@ -12,8 +12,9 @@ export default class DateFormatter {
 
   set value(date) {
     if (date) {
-      this.raw = moment(date).toDate();
-      this.formatted = moment(date).format('L');
+      this.raw = moment(date);
+      this.dateFormatted = moment(date).format('L');
+      this.dateTimeFormatted = moment(date).format('L LT');
       this.iso = moment(date).format('YYYY-MM-DDTHH:mm:ss');
     } else {
       this.raw = null;

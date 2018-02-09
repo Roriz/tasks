@@ -1,22 +1,13 @@
 import Services from '@/services';
 import Task from '@/models/task';
-import Cid from '@/models/concerns/cid';
+import TASKS from '@/seeds/tasks';
 import SEARCH_FIELDS from '@/consts/search-fields';
 
 export default {
   namespaced: true,
 
   state: {
-    list: [
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 1', tags: [{ description: 'Tag1' }] }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 2', tags: [{ description: 'Tag1' }, { description: 'Tag2' }] }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 3' }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 4' }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 5', tags: [{ description: 'Tag1' }, { description: 'Tag2' }] }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 6' }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 7', tags: [{ description: 'Tag1' }, { description: 'Tag2' }] }),
-      new Task({ id: Cid(), due_time: '00:00', description: 'Test 8' }),
-    ],
+    list: TASKS,
     filters: {
       search: '',
       searchField: SEARCH_FIELDS.description,
@@ -94,13 +85,24 @@ export default {
         if (state.filters.searchField === SEARCH_FIELDS.description) {
           tasks = tasks.filter(task => task.description.search(search) !== -1);
         } else if (state.filters.searchField === SEARCH_FIELDS.tags) {
-          tasks = tasks.filter(task => {
-            return task.tags.find((tag) => tag.description.search(search) !== -1)
-          });
+          // eslint-disable-next-line
+          tasks = tasks.filter(task => task.tags.find(tag => tag.description.search(search) !== -1));
         }
       }
 
       return tasks;
+    },
+    tasksDoneChart(state) {
+      const tasksDone = state.list.filter(task => task.deadLine.raw.toDate() < new Date());
+      const donePercentage = tasksDone.length ? (tasksDone.length / state.list.length) * 100 : 0;
+
+      return [{
+        name: 'Done',
+        y: donePercentage,
+      }, {
+        name: 'On going',
+        y: 100 - donePercentage,
+      }];
     },
   },
 };

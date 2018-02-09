@@ -22,8 +22,10 @@ export default class Task {
     return Boolean(this.id);
   }
 
-  get dueDatetime() {
-    return `${this.due_date.formatted} ${this.due_time}`;
+  get deadLine() {
+    const date = this.due_date.raw.format('YYYY-MM-DD');
+    const time = this.due_time;
+    return new DateFormatter(`${date} ${time}`);
   }
 
   get isValid() {
